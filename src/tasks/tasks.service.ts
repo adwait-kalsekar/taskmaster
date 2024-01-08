@@ -3,12 +3,12 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { TaskStatus } from './tasks-status.enum';
+import { TaskStatus } from './task-status.enum';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Task } from './tasks.entity';
+import { Task } from './task.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -36,31 +36,6 @@ export class TasksService {
     return tasks;
   }
 
-  // getTasksWithFilters(filterDto: GetTasksFilterDto): Task[] {
-  //   let tasks = this.getAllTasks();
-
-  //   const { status, search } = filterDto;
-
-  //   if (status) {
-  //     tasks = tasks.filter((task) => task.status === status);
-  //   }
-
-  //   if (search) {
-  //     tasks = tasks.filter((task) => {
-  //       const searchTerm = search.toLowerCase();
-  //       if (
-  //         task.title.toLowerCase().includes(searchTerm) ||
-  //         task.description.toLowerCase().includes(searchTerm)
-  //       ) {
-  //         return true;
-  //       }
-  //       return false;
-  //     });
-  //   }
-
-  //   return tasks;
-  // }
-
   async getTaskById(id: string): Promise<Task> {
     const task = await this.tasksRepository.findOneBy({ id });
 
@@ -80,22 +55,11 @@ export class TasksService {
     });
 
     if (!task) {
+      console.log('Task not created');
       throw new InternalServerErrorException();
     }
 
     await this.tasksRepository.save(task);
-    return task;
-  }
-
-  async updateTask(id: string, createTaskDto: CreateTaskDto): Promise<Task> {
-    const task = await this.getTaskById(id);
-
-    if (task.status !== TaskStatus.DONE) {
-      task.title = createTaskDto.title;
-      task.description = createTaskDto.description;
-      await this.tasksRepository.save(task);
-    }
-
     return task;
   }
 
