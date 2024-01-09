@@ -39,3 +39,9 @@ While postgresql running, start the app in development mode
 ```sh
 npm run start:dev
 ```
+
+To start the app in production mode
+
+```sh
+npm run start:prod
+```

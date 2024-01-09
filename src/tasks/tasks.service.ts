@@ -1,6 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { TaskStatus } from './task-status.enum';
@@ -14,6 +15,7 @@ import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class TasksService {
+  private logger = new Logger('TasksService');
   constructor(
     @InjectRepository(Task) private tasksRepository: Repository<Task>,
   ) {}
@@ -35,8 +37,13 @@ export class TasksService {
       );
     }
 
-    const tasks = await query.getMany();
-    return tasks;
+    try {
+      const tasks = await query.getMany();
+      return tasks;
+    } catch (error) {
+      this.logger.error(`Failed to get tasks for user ${user.username}`);
+      throw new InternalServerErrorException();
+    }
   }
 
   async getTaskById(id: string, user: User): Promise<Task> {
@@ -59,7 +66,7 @@ export class TasksService {
     });
 
     if (!task) {
-      console.log('Task not created');
+      this.logger.error('Task not created');
       throw new InternalServerErrorException();
     }
 

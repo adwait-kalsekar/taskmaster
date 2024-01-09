@@ -1,7 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { JWT_SECRET_KEY } from 'src/utils/constants';
+import { JWT_SECRET_KEY } from 'src/config/constants';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { JwtPayload } from './jwt-payload.interface';
