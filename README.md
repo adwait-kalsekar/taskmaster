@@ -17,7 +17,7 @@ TaskMaster is a Task Manager application built with NestJS and uses ExpressJS an
 Copy the git url and clone it in the required folder
 
 ```sh
-git clone *repo url*
+git clone https://github.com/adwait-kalsekar/taskmaster.git
 ```
 
 Install the dependencies and devDependencies and start the server.
